@@ -1,7 +1,16 @@
 import  express  from "express";  // importing express
 import url_details from "./middleware.js"
+import mongoose from "mongoose";
+import { createUser } from "./controller.js";
 
 const app=express();   //create a reference variable for express to use it
+
+
+app.use(express.json());  // all the inputs to express will be converted from JSON to Object
+//example Json= { "name": "John","age": 30} 
+//after parsing Object = { name: 'John', age: 30 }
+
+
 
 app.get("/",(req,res)=>{     // https://localhost:3002/ after this '/' call here
     res.send("Hello World");
@@ -35,7 +44,19 @@ app.post("/users",(req,res)=>{        // using query params
     
 })
 
+function connect()
+{
+   mongoose.connect("mongodb+srv://717821l238:WStW1oqCS3LPNPBw@cluster0.ryc0weh.mongodb.net/?retryWrites=true&w=majority&&dbname=table"); //mongodb is connected using mongoose veiwed in atlas
+//    mongoose.connect('mongodb://127.0.0.1:27017/table');   //mongoDB local storge // can be viewed in compass
+    console.log("MongoDB Connected");
+}
+
+app.post("/create",url_details,createUser)
+
+
 
 app.listen(3000,()=>{
+    connect();
+   
     console.log("Server started");
 }); // express will use port 3002 or replace 3002 with frontend link
